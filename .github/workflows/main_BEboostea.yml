@@ -2,7 +2,7 @@
 # More GitHub Actions for Azure: https://github.com/Azure/actions
 
 name: Build and deploy PHP app to Azure Web App - BEboostea
-
+# Thêm dòng này để trigger một run mới
 on:
   push:
     branches:

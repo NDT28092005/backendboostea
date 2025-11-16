@@ -37,7 +37,7 @@ jobs:
         if: steps.check_files.outputs.files_exists == 'true'
         run: |
           php --version
-          composer config "http-basic.nova.laravel.com" "${{ secrets.NOVA_USER }}" "${{ secrets.NOVA_KEY }}"
+          composer config "http-basic.nova.laravel.com" "${{ secrets.NOVA_USER }}" "${{ secrets.NOVA_PASSSWORD }}"
 
       - name: Zip files the application files
         run: zip -r release.zip ./*
@@ -77,5 +77,5 @@ jobs:
         with:
           app-name: 'BEboostea'
           slot-name: 'Production'
-          publish-profile: ${{ secrets.AzureAppService_PublishProfile }}
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE }}
           package: .

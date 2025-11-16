@@ -76,6 +76,6 @@ jobs:
         id: deploy-to-webapp
         with:
           app-name: 'BEboostea'
-          slot-name: 'Production'
+          # slot-name: 'Production'
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE }}
           package: .

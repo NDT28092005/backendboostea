@@ -37,7 +37,7 @@ jobs:
         if: steps.check_files.outputs.files_exists == 'true'
         run: |
           php --version
-          composer config "http-basic.nova.laravel.com" "${{ secrets.NOVA_USER }}" "${{ secrets.NOVA_PASSSWORD }}"
+          composer config "http-basic.nova.laravel.com" "${{ secrets.NOVA_USER }}" "${{ secrets.NOVA_PASSWORD }}"
 
       - name: Zip files the application files
         run: zip -r release.zip ./*

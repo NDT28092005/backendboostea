@@ -46,7 +46,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: php-app
-          path: .
+          path: release.zip
 
   deploy:
     runs-on: ubuntu-latest
@@ -62,7 +62,7 @@ jobs:
           name: php-app
       
       - name: Unzip artifact
-        run: unzip release.zip
+        run: unzip -o release.zip
 
       - name: Login to Azure
         uses: azure/login@v2

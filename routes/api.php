@@ -20,6 +20,7 @@ use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\HomeApiController;
 use App\Http\Controllers\Api\TestimonialController;
 use App\Http\Controllers\Api\CheckoutController;
+use App\Http\Controllers\NewsletterController;
 
 
 Route::delete('/cart/clear-cart', [CheckoutController::class, 'clearCart'])
@@ -77,6 +78,7 @@ Route::middleware('auth:sanctum')->get('/admin/me', [AdminAuthController::class,
 // -------------------------
 Route::post('/register', [RegisterController::class, 'register']); // Đăng ký email + gửi mail
 Route::post('/login', [AuthenticationController::class, 'login']); // Login email/password
+Route::post('/newsletter/subscribe', [NewsletterController::class, 'subscribe']); // Đăng ký nhận tin
 
 // Google OAuth
 Route::get('/auth/google', [GoogleController::class, 'redirectToGoogle']); // Redirect user đến Google

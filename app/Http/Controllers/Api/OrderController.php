@@ -50,6 +50,7 @@ class OrderController extends Controller
                     'product_id' => $item->product_id,
                     'price' => $item->product->price,
                     'quantity' => $item->quantity,
+                    'status' => 'active', // Đảm bảo status được set rõ ràng
                 ]);
             }
 
@@ -143,14 +144,29 @@ class OrderController extends Controller
             // Cập nhật trạng thái item thành cancelled
             $item->update(['status' => 'cancelled']);
 
-            // Tính lại tổng tiền đơn hàng (chỉ tính các item còn active)
-            $activeItems = $order->items()->where('status', 'active')->get();
+            // Refresh order để đảm bảo có dữ liệu mới nhất
+            $order->refresh();
+            $order->load('items');
+
+            // Tính lại tổng tiền đơn hàng (tính tất cả items trừ những items đã cancelled)
+            // Bao gồm cả items có status NULL (cho tương thích với dữ liệu cũ)
+            $activeItems = $order->items()
+                ->where(function($query) {
+                    $query->whereNotIn('status', ['cancelled'])
+                          ->orWhereNull('status');
+                })
+                ->get();
             $newTotal = $activeItems->sum(fn($i) => $i->price * $i->quantity);
             
             $order->update(['total_price' => $newTotal]);
 
             // Nếu tất cả items đều bị hủy, cập nhật trạng thái đơn hàng
-            $activeItemsCount = $order->items()->where('status', 'active')->count();
+            $activeItemsCount = $order->items()
+                ->where(function($query) {
+                    $query->whereNotIn('status', ['cancelled'])
+                          ->orWhereNull('status');
+                })
+                ->count();
             if ($activeItemsCount === 0) {
                 $order->update(['status' => 'cancelled']);
             }

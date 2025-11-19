@@ -29,9 +29,10 @@ Route::post('/payment-success', [CheckoutController::class, 'paymentSuccess']);
 Route::post('/checkout', [CheckoutController::class, 'checkout']);
 Route::get('/orders', [OrderController::class, 'myOrders'])
     ->middleware('auth:sanctum');
-Route::put('/orders/{order}/status', [OrderController::class, 'updateStatus'])
-    ->middleware('auth:sanctum');
+// Đặt route cụ thể hơn trước để tránh conflict
 Route::put('/orders/{orderId}/items/{itemId}/cancel', [OrderController::class, 'cancelOrderItem'])
+    ->middleware('auth:sanctum');
+Route::put('/orders/{order}/status', [OrderController::class, 'updateStatus'])
     ->middleware('auth:sanctum');
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/checkout', [CheckoutController::class, 'checkout']);

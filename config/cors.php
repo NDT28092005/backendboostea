@@ -22,7 +22,8 @@ return [
     'allowed_origins' => [
         'http://localhost:3000',      // React chạy local
         'http://localhost:5173',      // React chạy local (Vite)
-        'https://blue-river-076ceaf00.3.azurestaticapps.net', 
+        'https://blue-river-076ceaf00.3.azurestaticapps.net',
+        'https://www.bootsea.store/',
     ],
 
     'allowed_origins_patterns' => [],

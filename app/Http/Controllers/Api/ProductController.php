@@ -42,7 +42,7 @@ class ProductController extends Controller
             'category_id' => 'nullable|exists:categories,id',
             'image' => 'nullable|image|max:2048',
             'images.*' => 'nullable|image|max:2048',
-            'description' => 'nullable|string|max:5000',   // ✅ validate mô tả
+            'description' => 'nullable|string',   // ✅ validate mô tả (TEXT field - no max limit)
         ]);
 
         // ✅ tạo product trước
@@ -83,7 +83,7 @@ class ProductController extends Controller
             'category_id' => 'nullable|exists:categories,id',
             'image' => 'nullable|image|max:2048',
             'images.*' => 'nullable|image|max:2048',
-            'description' => 'nullable|string|max:5000',   // ✅ validate mô tả
+            'description' => 'nullable|string',   // ✅ validate mô tả (TEXT field - no max limit)
         ]);
 
         $validated['slug'] = Str::slug($request->name); // ✅ create slug luôn

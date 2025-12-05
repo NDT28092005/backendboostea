@@ -88,16 +88,51 @@ class ProductController extends Controller
 
         $validated['slug'] = Str::slug($request->name); // ✅ create slug luôn
 
+        // ✅ Xóa ảnh cũ trước khi upload ảnh mới
+        if ($request->hasFile('image') && $product->image_url) {
+            // Extract path từ URL (xử lý nhiều format URL)
+            $oldPath = $product->image_url;
+            // Loại bỏ domain và các prefix
+            $oldPath = preg_replace('#^https?://[^/]+#', '', $oldPath);
+            $oldPath = str_replace('/storage/', '', $oldPath);
+            $oldPath = str_replace('storage/', '', $oldPath);
+            // Nếu path không bắt đầu bằng 'products/', thêm vào
+            if (!Str::startsWith($oldPath, 'products/')) {
+                $oldPath = 'products/' . basename($oldPath);
+            }
+            Storage::disk('public')->delete($oldPath);
+        }
+
         $product->update($validated);
 
+        // ✅ Upload ảnh chính mới
         if ($request->hasFile('image')) {
             $path = $request->file('image')->store('products', 'public');
             $product->update(['image_url' => asset(Storage::url($path))]);
         }
 
+        // ✅ Xóa ảnh gallery cũ và upload ảnh mới
         if ($request->hasFile('images')) {
+            // Xóa ảnh cũ từ storage
+            $oldImages = ProductImage::where('product_id', $product->id)->get();
+            foreach ($oldImages as $oldImage) {
+                // Extract path từ URL (xử lý nhiều format URL)
+                $oldPath = $oldImage->image_url;
+                // Loại bỏ domain và các prefix
+                $oldPath = preg_replace('#^https?://[^/]+#', '', $oldPath);
+                $oldPath = str_replace('/storage/', '', $oldPath);
+                $oldPath = str_replace('storage/', '', $oldPath);
+                // Nếu path không bắt đầu bằng 'products/', thêm vào
+                if (!str_starts_with($oldPath, 'products/')) {
+                    $oldPath = 'products/' . basename($oldPath);
+                }
+                Storage::disk('public')->delete($oldPath);
+            }
+            
+            // Xóa records cũ
             ProductImage::where('product_id', $product->id)->delete();
 
+            // Upload ảnh mới
             foreach ($request->file('images') as $image) {
                 $path = $image->store('products', 'public');
                 ProductImage::create([
@@ -106,6 +141,10 @@ class ProductController extends Controller
                 ]);
             }
         }
+
+        // ✅ Refresh lại product với relationships để trả về dữ liệu mới nhất
+        $product->refresh();
+        $product->load(['category', 'images', 'reviews']);
 
         return response()->json(['message' => 'Updated', 'data' => $product]);
     }

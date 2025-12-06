@@ -40,8 +40,8 @@ class ProductController extends Controller
             'featured' => 'nullable|boolean',
             'stock' => 'required|integer',
             'category_id' => 'nullable|exists:categories,id',
-            'image' => 'nullable|image|max:2048',
-            'images.*' => 'nullable|image|max:2048',
+            'image' => 'nullable|image|max:5120',
+            'images.*' => 'nullable|image|max:5120',
             'description' => 'nullable|string',   // ✅ validate mô tả (TEXT field - no max limit)
         ]);
 
@@ -81,8 +81,8 @@ class ProductController extends Controller
             'original_price' => 'nullable|integer', // ✅ FIX
             'featured' => 'nullable|boolean',       // ✅ FIX
             'category_id' => 'nullable|exists:categories,id',
-            'image' => 'nullable|image|max:2048',
-            'images.*' => 'nullable|image|max:2048',
+            'image' => 'nullable|image|max:5120',
+            'images.*' => 'nullable|image|max:5120',
             'description' => 'nullable|string',   // ✅ validate mô tả (TEXT field - no max limit)
         ]);
 

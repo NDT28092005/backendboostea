@@ -64,7 +64,7 @@ class CheckoutController extends Controller
             DB::commit();
 
             if ($order->payment_method === "bank") {
-                $qrUrl = "https://img.vietqr.io/image/970422-123456789-compact2.png?amount={$order->total_price}&addInfo=" . urlencode("Thanh toán đơn hàng $order->order_code");
+                $qrUrl = "https://img.vietqr.io/image/970422-22751921-compact2.png?amount={$order->total_price}&addInfo=" . urlencode("Thanh toán đơn hàng $order->order_code");
             } else {
                 $qrUrl = null;
             }
